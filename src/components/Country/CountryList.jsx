@@ -19,7 +19,6 @@ function CountryList({cities, isLoading}) {
         }
      },[])
 
-    console.log(countries)
     return (
          <ul className={styles.countryList}>
         {countries.map(country=> <CountryItem key={country.id} country={country}/>)}     
