@@ -3,9 +3,11 @@ import styles from './CountryList.module.css'
 import Spinner from '../Spinner/Spinner'
 import CountryItem from './CountryItem'
 import Message from '../Message/Message'
+import { useCities } from '../../context/CitiesContext';
 
-function CountryList({cities, isLoading}) {
+function CountryList() {
 
+    const {cities, isLoading} = useCities();
    
     if(isLoading) return <Spinner/>
 
