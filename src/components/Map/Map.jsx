@@ -4,10 +4,13 @@ import markerIconPng from "leaflet/dist/images/marker-icon.png"
 import {Icon} from 'leaflet'
 import styles from './Map.module.css'
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useCities } from '../../context/CitiesContext';
 
 function Map() {
 	//Programattic navigation.
 	const navigate = useNavigate()
+	const {cities} = useCities();
+
 	const [mapPosition,setMapPosition] = useState([40,0]);
 	const [searchParams, setSearchParams] = useSearchParams()
 
@@ -22,11 +25,13 @@ function Map() {
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 					url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
 				/>
-				<Marker position={mapPosition} icon={new Icon({iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41]})}>
-					<Popup>
-					A pretty CSS3 popup. <br /> Easily customizable.
-					</Popup>
-				</Marker>
+				{cities.map((city)=>(
+					<Marker position={[city.position.lat,city.position.lng]} key={city.id} icon={new Icon({iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41]})}>
+						<Popup>
+							<span>{city.emoji}</span> <span>{city.cityName}</span>
+						</Popup>
+					</Marker>
+				))}
 			</MapContainer>
 		</div>
 	)
