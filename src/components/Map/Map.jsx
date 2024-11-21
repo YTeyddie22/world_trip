@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import markerIconPng from "leaflet/dist/images/marker-icon.png"
 import {Icon} from 'leaflet'
 import styles from './Map.module.css'
@@ -9,8 +9,7 @@ import { useCities } from '../../context/CitiesContext';
 /* eslint react/prop-types: 0 */
 
 function Map() {
-	//Programattic navigation.
-	const navigate = useNavigate();
+	
 	const {cities} = useCities();
 
 	const [mapPosition,setMapPosition] = useState([40,0]);
@@ -39,6 +38,7 @@ function Map() {
 					</Marker>
 				))}
 				<ChangePosition position={mapPosition}/>
+				<DetectClick/>
 			</MapContainer>
 		</div>
 	)
@@ -49,6 +49,14 @@ function ChangePosition({position}) {
 	map.setView(position);
 
 	return null
+}
+
+function DetectClick() {
+	//Programattic navigation.
+	const navigate = useNavigate();
+	useMapEvents({
+		click: (e) => navigate(`form`),
+	})
 }
 
 export default Map;
