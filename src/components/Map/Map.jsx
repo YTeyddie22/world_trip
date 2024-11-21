@@ -1,21 +1,27 @@
-import { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import markerIconPng from "leaflet/dist/images/marker-icon.png"
 import {Icon} from 'leaflet'
 import styles from './Map.module.css'
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCities } from '../../context/CitiesContext';
 
+/* eslint react/prop-types: 0 */
+
 function Map() {
 	//Programattic navigation.
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const {cities} = useCities();
 
 	const [mapPosition,setMapPosition] = useState([40,0]);
-	const [searchParams, setSearchParams] = useSearchParams()
+	const [searchParams] = useSearchParams();
 
-	const lat =searchParams.get('lat')
-	const lng = searchParams.get('lng')
+	const mapLat =searchParams.get('lat');
+	const mapLng = searchParams.get('lng');
+	
+	useEffect(function() {
+		if(mapLat && mapLng) setMapPosition([mapLat,mapLng]);
+	},[mapLat, mapLng]);
 
 
 	return (
@@ -32,9 +38,17 @@ function Map() {
 						</Popup>
 					</Marker>
 				))}
+				<ChangePosition position={mapPosition}/>
 			</MapContainer>
 		</div>
 	)
+}
+
+function ChangePosition({position}) {
+	const map = useMap();
+	map.setView(position);
+
+	return null
 }
 
 export default Map;
