@@ -11,6 +11,7 @@ import Message from "../Message/Message";
 import Spinner from "../Spinner/Spinner";
 import BackButton from "../BackButton/BackButton";
 import { useUrlPosition } from "../../hooks/useUrlPosition";
+import { useCities } from "../../context/CitiesContext";
 
 export function convertToEmoji(countryCode) {
 	const codePoints = countryCode
@@ -23,11 +24,12 @@ export function convertToEmoji(countryCode) {
 const BASE_URL = " https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 function Form() {
+	const { createCity } = useCities();
+	const [lat, lng] = useUrlPosition();
 	const [cityName, setCityName] = useState("");
 	const [country, setCountry] = useState("");
 	const [date, setDate] = useState(new Date());
 	const [notes, setNotes] = useState("");
-	const [lat, lng] = useUrlPosition();
 	const [isLoadingGeocoding, setIsLoadingGeocoding] = useState(false);
 	const [emoji, setEmoji] = useState("");
 	const [geocodingError, setGeocodingError] = useState("");
@@ -80,6 +82,8 @@ function Form() {
 				lng,
 			},
 		};
+
+		createCity(newCity);
 	}
 
 	if (isLoadingGeocoding) return <Spinner />;
